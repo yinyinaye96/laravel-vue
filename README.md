@@ -1,11 +1,8 @@
 
 # Installation 
-## Clone Project
-```
-git clone https://github.com/yinyinaye96/laravel-vue.git
-```
 ### First time
 ```
+git clone https://github.com/yinyinaye96/laravel-vue.git
 cp .env.example .env
 php composer install
 ```
