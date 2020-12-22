@@ -4,13 +4,12 @@
 ```
 git clone https://github.com/yinyinaye96/laravel-vue.git
 cp .env.example .env
-php composer install
+composer install
 ```
-## Run App
+## Run Application Key
 ```
-php artisan serve
+php artisan key:generate
 ```
-Then you can access: http://localhost:8000
 ## migration
 ```
 php artisan migrate
@@ -30,11 +29,19 @@ To generate JS and CSS to work with node
 ```
 npm run dev
 ```
+Or
 
-## Build Development
-To generate JS and CSS to work with node when development
 ```
 npm run watch
 ```
-
+## Build Development
+To generate JS and CSS to work with node when development
+```
+npm run prod
+```
+## Run App
+```
+php artisan serve
+```
+Then you can access: http://localhost:8000
 
