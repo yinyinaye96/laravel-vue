@@ -6,7 +6,7 @@ git clone https://github.com/yinyinaye96/laravel-vue.git
 cp .env.example .env
 composer install
 ```
-## Run Application Key
+## Application Key
 ```
 php artisan key:generate
 ```
