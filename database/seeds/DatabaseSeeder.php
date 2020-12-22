@@ -1,7 +1,8 @@
 <?php
 
+use App\Models\Post;
 use Illuminate\Database\Seeder;
-
+use App\Models\User;
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -11,6 +12,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->call(UserSeeder::class);
+        factory(User::class, 1)->create();
+        factory(Post::class, 10)->create();
     }
 }

@@ -4,69 +4,83 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
+use App\Contracts\Services\PostServiceInterface;
 
 class PostController extends Controller
 {
+
+    private $postService;
+    /**
+     * Class Constructor
+     * @param 
+     * @return
+     */
+    public function __construct(PostServiceInterface $postService)
+    {
+        $this->postService = $postService;
+    }
     /**
      * Display a listing of the posts.
-     *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        $posts = Post::all()->toArray();
+        $posts = $this->postService->getPost();
         return response()->json($posts);
     }
 
     /**
      * Show the form for creating a new post.
-     *
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
     public function create(Request $request)
     {
-        $post = new Post([
-            'title' => $request->input('title'),
-            'description' => $request->input('description')
-        ]);
-        $post->save();
+        $request->validate(
+            [
+                'title' => 'required|unique:posts|min:5',
+                'description' => 'required'
+            ],
+            [
+                'required' => 'This :attribute field is required',
+                'unique' => 'This title is already exits'
+            ]
+        );
+        $post = $this->postService->storePost($request);
         return response()->json($post);
     }
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Post  $post
+     * @param int $id
+     * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        $post = Post::find($id);
+        $post = $this->postService->editPost($id);
         return response()->json($post);
     }
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Post  $post
+     * @param Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update($id, Request $request)
     {
-        $post = Post::find($id);
-        $update = $post->update($request->all());
+        $update = $this->postService->updatePost($id, $request);
         return response()->json($update);
     }
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Post  $post
+     * @param int $id
+     * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        $post = Post::find($id);
-        $post->delete();
-        return response()->json('The post successfully deleted');
+        $destroy = $this->postService->destroyPost($id);
+        return response()->json($destroy);
     }
 }

@@ -13,9 +13,13 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
+//post
 Route::get('posts', 'PostController@index');
 Route::post('create', 'PostController@create');
 Route::post('delete/{id}', 'PostController@destroy');
 Route::get('edit/{id}', 'PostController@edit');
 Route::post('update/{id}', 'PostController@update');
+
+
+//user
+Route::get('users', 'UserController@index');

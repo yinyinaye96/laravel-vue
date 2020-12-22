@@ -13,7 +13,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->bind('App\Contracts\Dao\PostDaoInterface', 'App\Dao\PostDao');
+        $this->app->bind('App\Contracts\Dao\UserDaoInterface', 'App\Dao\UserDao');
+
+        //business logic
+        $this->app->bind('App\Contracts\Services\PostServiceInterface', 'App\Services\PostService');
+        $this->app->bind('App\Contracts\Services\UserServiceInterface', 'App\Services\UserService');
     }
 
     /**
