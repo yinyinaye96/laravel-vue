@@ -15,7 +15,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="user in users" :key="user.id">
+        <tr v-for="user in displayedUsers" :key="user.id">
           <td>{{ user.id }}</td>
           <td>{{ user.name }}</td>
           <td>{{ user.email }}</td>
@@ -44,6 +44,41 @@
         </tr>
       </tbody>
     </table>
+    <nav aria-label="Page navigation example">
+      <ul class="pagination">
+        <li class="page-item">
+          <button
+            type="button"
+            class="page-link"
+            v-if="page != 1"
+            @click="page--"
+          >
+            Previous
+          </button>
+        </li>
+        <li class="page-item">
+          <button
+            type="button"
+            class="page-link"
+            v-for="pageNumber in pages.slice(page - 1, page + 5)"
+            :key="pageNumber"
+            @click="page = pageNumber"
+          >
+            {{ pageNumber }}
+          </button>
+        </li>
+        <li class="page-item">
+          <button
+            type="button"
+            class="page-link"
+            @click="page++"
+            v-if="page < pages.length"
+          >
+            Next
+          </button>
+        </li>
+      </ul>
+    </nav>
   </div>
 </template>
 <script>
@@ -52,6 +87,9 @@ export default {
   data() {
     return {
       users: [],
+      page: 1,
+      perPage: 1,
+      pages: [],
     };
   },
   created() {
@@ -65,6 +103,26 @@ export default {
         let i = this.users.map((item) => item.id).indexOf(id);
         this.users.splice(i, 1);
       });
+    },
+    paginate(users) {
+      let page = this.page;
+      let perPage = this.perPage;
+      let from = page * perPage - perPage;
+      let to = page * perPage;
+      return users.slice(from, to);
+    },
+  },
+  computed: {
+    displayedUsers() {
+      return this.paginate(this.users);
+    },
+  },
+  watch: {
+    users() {
+      let numberOfPages = Math.ceil(this.users.length / this.perPage);
+      for (let index = 1; index <= numberOfPages; index++) {
+        this.pages.push(index);
+      }
     },
   },
   filters: {

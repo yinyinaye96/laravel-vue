@@ -15,7 +15,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="post in posts" :key="post.id">
+        <tr v-for="post in displayedPosts" :key="post.id">
           <td>{{ post.id }}</td>
           <td>{{ post.title }}</td>
           <td>{{ post.description }}</td>
@@ -24,7 +24,14 @@
           <td>
             <div class="btn-group" role="group">
               <router-link
-                :to="{ name: 'edit', params: { id: post.id, title: post.title, description: post.description} }"
+                :to="{
+                  name: 'edit',
+                  params: {
+                    id: post.id,
+                    title: post.title,
+                    description: post.description,
+                  },
+                }"
                 class="btn btn-primary"
                 >Edit
               </router-link>
@@ -36,14 +43,52 @@
         </tr>
       </tbody>
     </table>
+    <nav aria-label="Page navigation example">
+      <ul class="pagination">
+        <li class="page-item">
+          <button
+            type="button"
+            class="page-link"
+            v-if="page != 1"
+            @click="page--"
+          >
+            Previous
+          </button>
+        </li>
+        <li class="page-item">
+          <button
+            type="button"
+            class="page-link"
+            v-for="pageNumber in pages.slice(page - 1, page + 5)"
+            :key="pageNumber"
+            @click="page = pageNumber"
+          >
+            {{ pageNumber }}
+          </button>
+        </li>
+        <li class="page-item">
+          <button
+            type="button"
+            class="page-link"
+            @click="page++"
+            v-if="page < pages.length"
+          >
+            Next
+          </button>
+        </li>
+      </ul>
+    </nav>
   </div>
 </template>
 <script>
-import moment from 'moment';
+import moment from "moment";
 export default {
   data() {
     return {
       posts: [],
+      page: 1,
+      perPage: 5,
+      pages: [],
     };
   },
   created() {
@@ -59,10 +104,30 @@ export default {
         this.posts.splice(i, 1);
       });
     },
+    paginate(posts) {
+      let page = this.page;
+      let perPage = this.perPage;
+      let from = page * perPage - perPage;
+      let to = page * perPage;
+      return posts.slice(from, to);
+    },
+  },
+  computed: {
+    displayedPosts() {
+      return this.paginate(this.posts);
+    },
+  },
+  watch: {
+    posts() {
+      let numberOfPages = Math.ceil(this.posts.length / this.perPage);
+      for (let index = 1; index <= numberOfPages; index++) {
+        this.pages.push(index);
+      }
+    },
   },
   filters: {
-    formatDate : function (date) {
-      return moment(String(date)).format('MM/DD/YYYY')
+    formatDate: function (date) {
+      return moment(String(date)).format("MM/DD/YYYY");
     },
   },
 };

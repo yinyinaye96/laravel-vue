@@ -1,0 +1,27 @@
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+}
+.modal-padding {
+    padding-top: 12%;
+}
+.pagination {
+    justify-content: center;
+}
+button.page-link {
+    display: inline-block;
+}
+button.page-link {
+    font-size: 17px;
+    color: #29b3ed;
+    padding: 5px 10px;
+}
+.offset{
+  width: 500px;
+  margin: 20px auto;  
+}
