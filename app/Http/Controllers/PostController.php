@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Post;
 use Illuminate\Http\Request;
 use App\Contracts\Services\PostServiceInterface;
 
@@ -12,8 +11,7 @@ class PostController extends Controller
     private $postService;
     /**
      * Class Constructor
-     * @param 
-     * @return
+     * @param PostServiceInterface $postService
      */
     public function __construct(PostServiceInterface $postService)
     {
@@ -40,10 +38,6 @@ class PostController extends Controller
             [
                 'title' => 'required|unique:posts|min:5',
                 'description' => 'required'
-            ],
-            [
-                'required' => 'This :attribute field is required',
-                'unique' => 'This title is already exits'
             ]
         );
         $post = $this->postService->storePost($request);

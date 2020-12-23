@@ -32,17 +32,14 @@ export default {
   data() {
     return {
       post: {},
-      errors: {
-        title: "",
-        description: "",
-      },
+      errors: {},
       validationErrors: "",
     };
   },
   methods: {
     addPost() {
       axios
-        .post("/api/create", this.post)
+        .post("/api/post/create", this.post)
         .then((response) => this.$router.push({ name: "posts" }))
         .catch((err) => {
           this.validationErrors = err.response.data.message;

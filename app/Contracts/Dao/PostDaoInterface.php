@@ -8,8 +8,8 @@ namespace App\Contracts\Dao;
 interface PostDaoInterface
 {
   /**
-   * Store data to posts table
-   * @param $request 
+   * Get all data from posts table 
+   * @return array $posts
    */
   public function getPost();
 

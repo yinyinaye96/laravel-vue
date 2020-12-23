@@ -8,7 +8,9 @@
             <div class="collapse navbar-collapse">
                 <div class="navbar-nav">
                     <router-link to="/" class="nav-item nav-link">Home</router-link>
-                    <router-link to="/create" class="nav-item nav-link">Add Post</router-link>
+                    <router-link to="/post/create" class="nav-item nav-link">Add Post</router-link>
+                    <router-link to="/users" class="nav-item nav-link">Users</router-link>
+                    <router-link to="/user/create" class="nav-item nav-link">Add User</router-link>
                 </div>
             </div>
         </nav>

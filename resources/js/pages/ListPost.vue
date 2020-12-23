@@ -24,7 +24,7 @@
           <td>
             <div class="btn-group" role="group">
               <router-link
-                :to="{ name: 'edit', params: { id: post.id } }"
+                :to="{ name: 'edit', params: { id: post.id, title: post.title, description: post.description} }"
                 class="btn btn-primary"
                 >Edit
               </router-link>
@@ -47,14 +47,14 @@ export default {
     };
   },
   created() {
-    axios.get("/api/posts").then((response) => {
+    axios.get("/api/post/posts").then((response) => {
       this.posts = response.data;
       console.log(this.posts);
     });
   },
   methods: {
     deletePost(id) {
-      axios.post(`/api/delete/${id}`).then((response) => {
+      axios.post(`/api/post/delete/${id}`).then((response) => {
         let i = this.posts.map((item) => item.id).indexOf(id);
         this.posts.splice(i, 1);
       });

@@ -6,11 +6,11 @@
         <form @submit.prevent="updatePost" id="form">
           <div class="form-group">
             <label>Title</label>
-            <input type="text" class="form-control" v-model="title" />
+            <input type="text" name="title" class="form-control" v-model="title" />
           </div>
           <div class="form-group">
             <label>Description</label>
-            <input type="text" class="form-control" v-model="description" />
+            <textarea name="description" class="form-control" v-model="description"></textarea>
           </div>
           <button type="submit" class="btn btn-primary">Update Post</button>
         </form>
@@ -20,17 +20,22 @@
 </template>
 <script>
 export default {
-  data() {
-    return {
-      posts: [],
-    };
-  },
+  props: ["id", "title", "description"],
   methods: {
     updatePost() {
-      axios
-        .post(`/api/update/${this.$route.params.id}`, this.post)
-        .then((response) => {
+      var form = document.getElementById("form");
+      var formData = new FormData(form);
+      axios({
+        method: "post",
+        url: `/api/post/update/${this.$route.params.id}`,
+        data: formData,
+        config: { headers: { "Content-Type": "multipart/form-data" } },
+      })
+       .then((response) => {
           this.$router.push({ name: "posts" });
+        })
+        .catch((error) => {
+          console.log(error.response);
         });
     },
   },
