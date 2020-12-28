@@ -13,13 +13,14 @@
 .pagination {
     justify-content: center;
 }
-button.page-link {
+.pagination li a {
     display: inline-block;
 }
-button.page-link {
+.pagination li a {
     font-size: 17px;
     color: #29b3ed;
     padding: 5px 10px;
+    border: 1px solid;
 }
 .offset{
   width: 500px;

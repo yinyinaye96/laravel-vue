@@ -15,7 +15,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="user in displayedUsers" :key="user.id">
+        <tr v-for="(user, index) in users.data" :key="user.id">
           <td>{{ user.id }}</td>
           <td>{{ user.name }}</td>
           <td>{{ user.email }}</td>
@@ -36,7 +36,10 @@
                 class="btn btn-primary"
                 >Edit
               </router-link>
-              <button class="btn btn-danger" @click="deletePost(user.id)">
+              <button
+                class="btn btn-danger"
+                @click="deleteUser(index, user.id)"
+              >
                 Delete
               </button>
             </div>
@@ -44,84 +47,48 @@
         </tr>
       </tbody>
     </table>
-    <nav aria-label="Page navigation example">
-      <ul class="pagination">
-        <li class="page-item">
-          <button
-            type="button"
-            class="page-link"
-            v-if="page != 1"
-            @click="page--"
-          >
-            Previous
-          </button>
-        </li>
-        <li class="page-item">
-          <button
-            type="button"
-            class="page-link"
-            v-for="pageNumber in pages.slice(page - 1, page + 5)"
-            :key="pageNumber"
-            @click="page = pageNumber"
-          >
-            {{ pageNumber }}
-          </button>
-        </li>
-        <li class="page-item">
-          <button
-            type="button"
-            class="page-link"
-            @click="page++"
-            v-if="page < pages.length"
-          >
-            Next
-          </button>
-        </li>
-      </ul>
-    </nav>
+    <vue-pagination :pagination="users" @paginate="getPosts()" :offset="4">
+    </vue-pagination>
   </div>
 </template>
 <script>
 import moment from "moment";
+import VuePagination from "./pagination";
 export default {
   data() {
     return {
-      users: [],
-      page: 1,
-      perPage: 1,
-      pages: [],
+      users: {
+        total: 0,
+        per_page: 3,
+        from: 1,
+        to: 0,
+        current_page: 1,
+      },
+      offset: 4,
     };
   },
+  components: {
+    VuePagination,
+  },
   created() {
-    axios.get("/api/user/users").then((response) => {
-      this.users = response.data;
-    });
+    this.getPosts();
   },
   methods: {
-    deletePost(id) {
-      axios.post(`/api/user/delete/${id}`).then((response) => {
-        let i = this.users.map((item) => item.id).indexOf(id);
-        this.users.splice(i, 1);
-      });
+    getPosts() {
+      axios
+        .get(`/api/user/users?page=${this.users.current_page}`)
+        .then((response) => {
+          this.users = response.data;
+        })
+        .catch(() => {
+          console.log("handle server error from here");
+        });
     },
-    paginate(users) {
-      let page = this.page;
-      let perPage = this.perPage;
-      let from = page * perPage - perPage;
-      let to = page * perPage;
-      return users.slice(from, to);
-    },
-  },
-  computed: {
-    displayedUsers() {
-      return this.paginate(this.users);
-    },
-  },
-  watch: {
-    users() {
-      let numberOfPages = Math.ceil(this.users.length / this.perPage);
-      for (let index = 1; index <= numberOfPages; index++) {
-        this.pages.push(index);
+    deleteUser(index, id) {
+      if (confirm("Are you sure you want to remove this user?")) {
+        axios.post(`/api/user/delete/${id}`).then((response) => {
+          this.users.data.splice(index, 1);
+        });
       }
     },
   },

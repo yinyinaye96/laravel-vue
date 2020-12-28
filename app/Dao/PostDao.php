@@ -14,7 +14,7 @@ class PostDao implements PostDaoInterface
    */
   public function getPost()
   {
-    $posts = Post::all()->toArray();
+    $posts = Post::paginate(3);
     return $posts;
   }
 

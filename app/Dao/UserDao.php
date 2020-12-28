@@ -14,7 +14,7 @@ class UserDao implements UserDaoInterface
      */
     public function getUser()
     {
-        $users = User::all()->toArray();
+        $users = User::paginate(3);
         return $users;
     }
 
